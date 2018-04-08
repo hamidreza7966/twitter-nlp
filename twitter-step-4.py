@@ -1,16 +1,25 @@
+# -*- coding: utf-8 -*-import twitter_config
 import os,fnmatch,codecs
 
-i=0
 
-
-for dirpath, dirs, files in os.walk('step3'):
+counter = 0
+x=0
+h=[]
+m =open("step4/stop_words.txt","w",encoding="utf-8")
+for line in open("step3/word-frequency.txt","r",encoding="utf-8"):
+            for word in line.split():
+                h.append(word[:word.find(":")])
+                if(x>20):
+                    break
+                else:
+                    m.write(word[:word.find(":")]+"\n")
+                x+=1
+m.close()
+for dirpath, dirs, files in os.walk('step2'):
     for filename in fnmatch.filter(files, '*.txt'):
-
-        with codecs.open(os.path.join(dirpath, filename),'r',encoding="utf-8") as file:
-            for word in file.read().split(":"):
-                if( i<21 ):
-                    if(not word.isdigit() ):
-                        i += 1
-                        with codecs.open("step4/stop-words.txt", 'a+',encoding="utf-8") as f:
-                            print(word)
-                            f.write(word)
+        f=open("step4/"+filename+".txt","w",encoding="utf-8")
+        with codecs.open(os.path.join(dirpath, filename), 'r', encoding="utf-8") as file:
+            for word in file.read().split():
+                if word not in h:
+                    f.write(word+" ")
+        f.close()
